@@ -98,8 +98,8 @@ namespace BTG.ClientsApp.ViewModels
             if (string.IsNullOrWhiteSpace(AgeText) || !AgeText.All(char.IsDigit))
                 return (false, "Idade deve conter apenas números.");
 
-            if (!int.TryParse(AgeText, out var age) || age < 0 || age > 120)
-                return (false, "Idade deve ser um número válido entre 0 e 120.");
+            if (!int.TryParse(AgeText, out var age) || age < 18 || age > 120)
+                return (false, "Idade deve ser um número válido entre 18 e 120.");
 
             if (string.IsNullOrWhiteSpace(Address))
                 return (false, "O campo Endereço é obrigatório.");
