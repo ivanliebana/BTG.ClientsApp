@@ -2,8 +2,6 @@
 
 Aplicativo **.NET MAUI (Windows)** com CRUD de clientes (MVVM + CommunityToolkit) e **testes xUnit**.
 
-[![Build](https://github.com/SEU-USUARIO/BTG.ClientsApp/actions/workflows/dotnet.yml/badge.svg)](https://github.com/SEU-USUARIO/BTG.ClientsApp/actions/workflows/dotnet.yml)
-
 ## Tela do App
   ![Lista](docs/images/lista.png)
 
