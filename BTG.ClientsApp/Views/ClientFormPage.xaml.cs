@@ -23,6 +23,4 @@ public partial class ClientFormPage : ContentPage
                 Application.Current?.CloseWindow(win);
         });
     }
-
-
 }

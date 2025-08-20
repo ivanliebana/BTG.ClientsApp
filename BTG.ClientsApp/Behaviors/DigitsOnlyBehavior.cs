@@ -4,8 +4,8 @@ using System.Linq;
 namespace BTG.ClientsApp.Behaviors
 {
     /// <summary>
-    /// Restringe um Entry para aceitar apenas dígitos (0-9).
-    /// Filtra também texto colado.
+    /// Restricts an Entry to accept only digits (0-9).
+    /// Also filters pasted text.
     /// </summary>
     public sealed class DigitsOnlyBehavior : Behavior<Entry>
     {
@@ -27,14 +27,14 @@ namespace BTG.ClientsApp.Behaviors
 
             var newText = e.NewTextValue ?? string.Empty;
 
-            // Se já são apenas dígitos, não faz nada
+            // If it's already just digits, it doesn't do anything
             if (newText.All(char.IsDigit))
                 return;
 
-            // Filtra qualquer caractere não numérico
+            // Filters any non-numeric characters
             var filtered = new string(newText.Where(char.IsDigit).ToArray());
 
-            // Evita loops setando apenas quando necessário
+            // Avoid loops by setting only when necessary
             if (!string.Equals(filtered, newText))
                 entry.Text = filtered;
         }

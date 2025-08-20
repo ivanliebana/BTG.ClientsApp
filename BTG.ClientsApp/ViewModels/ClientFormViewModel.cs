@@ -10,7 +10,6 @@ namespace BTG.ClientsApp.ViewModels
 {
     /// <summary>
     /// ViewModel for the Add/Edit client modal form window.
-    /// Comments are in English per the project convention.
     /// </summary>
     public partial class ClientFormViewModel : ObservableObject
     {

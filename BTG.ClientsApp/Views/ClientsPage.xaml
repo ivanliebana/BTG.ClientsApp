@@ -17,19 +17,35 @@
     <Grid RowDefinitions="Auto,*" Padding="16,12">
 
         <!-- Cabeçalho -->
-        <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center">
+        <Grid ColumnDefinitions="*,Auto,Auto" VerticalOptions="Center">
             <Label Text="Lista de Clientes" Style="{StaticResource TitleLabel}" />
             <Button Grid.Column="1"
-                    Text="Adicionar"
-                    Style="{StaticResource PrimaryButton}"
-                    Command="{Binding AddCommand}" />
+            Text="Adicionar"
+            Style="{StaticResource PrimaryButton}"
+            Command="{Binding AddCommand}" />
+            <Button Grid.Column="2"
+            Text="Sair"
+            Style="{StaticResource GhostButton}"
+            Clicked="OnExitClicked" />
         </Grid>
+
 
         <!-- Lista -->
         <CollectionView Grid.Row="1"
                         ItemsSource="{Binding Clients}"
                         SelectionMode="None"
                         Margin="0,12,0,0">
+
+            <CollectionView.EmptyView>
+                <StackLayout Padding="20" HorizontalOptions="Center" VerticalOptions="Center">
+                    <Label Text="Nenhum registro encontrado."
+                   FontAttributes="Italic"
+                   TextColor="Gray"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center" />
+                </StackLayout>
+            </CollectionView.EmptyView>
+
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Border Style="{StaticResource Card}" Margin="0,8,0,0">

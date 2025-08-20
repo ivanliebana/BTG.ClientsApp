@@ -14,7 +14,6 @@ using Application = Microsoft.Maui.Controls.Application;
 
 #if WINDOWS
 using Microsoft.UI.Windowing;
-using Microsoft.UI.Xaml;
 using WinRT.Interop;
 using System.Runtime.InteropServices;
 #endif
@@ -73,7 +72,7 @@ namespace BTG.ClientsApp.Services
             return tcs.Task;
         }
 
-        // Fecha com segurança: reabilita o owner ANTES, autoriza o close e só então fecha
+        // Closes safely: reactivates the owner BEFORE, authorizes the close and only then closes
         private static Task CloseWindowSafe(Page page)
         {
             page.Dispatcher.Dispatch(() =>
@@ -89,7 +88,7 @@ namespace BTG.ClientsApp.Services
                         var childHwnd = WindowNative.GetWindowHandle(native);
                         if (childHwnd != 0)
                         {
-                            // reabilita o owner ANTES de fechar (evita corrida no Closing)
+                            // rehabilitates the owner BEFORE closing (avoids race on Closing)
                             nint owner = 0;
                             lock (s_lock)
                             {
@@ -97,17 +96,17 @@ namespace BTG.ClientsApp.Services
                                 {
                                     s_ownerByChild.Remove(childHwnd);
                                 }
-                                s_canClose.Add(childHwnd); // autoriza fechamento
+                                s_canClose.Add(childHwnd); // authorizes closure
                             }
 
                             if (owner != 0)
                             {
-                                try { EnableWindow(owner, true); } catch { /* ignore */ }
+                                try { EnableWindow(owner, true); } catch { }
                             }
                         }
                     }
                 }
-                catch { /* ignore */ }
+                catch { }
 #endif
                 if (win is not null)
                     Application.Current?.CloseWindow(win);
@@ -116,7 +115,7 @@ namespace BTG.ClientsApp.Services
             return Task.CompletedTask;
         }
 
-        // Conecta VM.ShowAlertAsync -> page.DisplayAlert (alerta acima do form)
+        // Connect VM.ShowAlertAsync -> page.DisplayAlert (alert above the form)
         private static void TryBindVmAlertToPage(ClientFormViewModel vm, Page page)
         {
             var prop = vm.GetType().GetProperty("ShowAlertAsync");
@@ -129,7 +128,7 @@ namespace BTG.ClientsApp.Services
         }
 
 #if WINDOWS
-        // ===== Win32 interop / estilos =====
+        // ===== Win32 interop / styles =====
         [DllImport("user32.dll")] private static extern bool ShowWindow(nint hWnd, int nCmdShow);
         [DllImport("user32.dll")] private static extern bool EnableWindow(nint hWnd, bool bEnable);
         [DllImport("user32.dll")] private static extern bool SetForegroundWindow(nint hWnd);
@@ -143,12 +142,12 @@ namespace BTG.ClientsApp.Services
         private const int GWLP_HWNDPARENT = -8;
         private const int GWL_EXSTYLE = -20;
 
-        private const long WS_SYSMENU = 0x00080000L; // botão X / menu do sistema
+        private const long WS_SYSMENU = 0x00080000L; // X button / system menu
         private const long WS_MINIMIZEBOX = 0x00020000L;
         private const long WS_MAXIMIZEBOX = 0x00010000L;
-        private const long WS_THICKFRAME = 0x00040000L; // redimensionável
-        private const long WS_CAPTION = 0x00C00000L; // título + ícone
-        private const long WS_DLGFRAME = 0x00400000L; // moldura de diálogo (sem título)
+        private const long WS_THICKFRAME = 0x00040000L; // resizable
+        private const long WS_CAPTION = 0x00C00000L; // title + icon
+        private const long WS_DLGFRAME = 0x00400000L; // dialog frame (untitled)
 
         private const long WS_EX_APPWINDOW = 0x00040000L;
         private const long WS_EX_TOOLWINDOW = 0x00000080L;
@@ -159,12 +158,12 @@ namespace BTG.ClientsApp.Services
         private const uint SWP_FRAMECHANGED = 0x0020;
 
         private static readonly object s_lock = new();
-        private static readonly HashSet<nint> s_canClose = new();              // children autorizadas a fechar
+        private static readonly HashSet<nint> s_canClose = new();              // children authorized to close
         private static readonly Dictionary<nint, nint> s_ownerByChild = new(); // child->owner
 
         /// <summary>
-        /// Modal real + borda de janela (sem título): owned, owner desabilitado, sem redimensionar,
-        /// sem min/max/X, centraliza; só fecha programaticamente. Estável para abrir/fechar múltiplas vezes.
+        /// Real modal + window border (untitled): owned, owner disabled, no resizing,
+        /// without min/max/X, center; it just closes programmatically. Stable to open/close multiple times.
         /// </summary>
         private static void PrepareModalOwnedWindow_WithBorder(Window childWindow, int width, int height)
         {
@@ -178,7 +177,7 @@ namespace BTG.ClientsApp.Services
             }
             catch { return; }
 
-            // Dono = primeira janela (principal)
+            // Owner = first window (main)
             var ownerWindow = Application.Current?.Windows?.FirstOrDefault();
             nint ownerHwnd = 0;
             try
@@ -186,9 +185,9 @@ namespace BTG.ClientsApp.Services
                 if (ownerWindow?.Handler?.PlatformView is Microsoft.UI.Xaml.Window ownerNative)
                     ownerHwnd = WindowNative.GetWindowHandle(ownerNative);
             }
-            catch { /* ignore */ }
+            catch { }
 
-            // 1) Owned + desabilita principal (modal real)
+            // 1) Owned + disables main (real modal)
             if (ownerHwnd != 0)
             {
                 try
@@ -197,47 +196,47 @@ namespace BTG.ClientsApp.Services
                     EnableWindow(ownerHwnd, false);
                     lock (s_lock) { s_ownerByChild[childHwnd] = ownerHwnd; }
                 }
-                catch { /* ignore */ }
+                catch { }
             }
 
-            // 2) Estado normal e foco no child
+            // 2) Normal state and focus on the child
             try
             {
                 ShowWindow(childHwnd, SW_SHOWNORMAL);
                 SetForegroundWindow(childHwnd);
             }
-            catch { /* ignore */ }
+            catch { }
 
             // 3) Estilo: SEM título/botões/redimensionar; COM borda (estilo diálogo)
             try
             {
                 var style = GetWindowLongPtr(childHwnd, GWL_STYLE).ToInt64();
 
-                // remove caption e botões
-                style &= ~WS_CAPTION;     // sem título/ícone
-                style &= ~WS_THICKFRAME;  // sem resize
-                style &= ~WS_MINIMIZEBOX; // sem minimizar
-                style &= ~WS_MAXIMIZEBOX; // sem maximizar
-                style &= ~WS_SYSMENU;     // sem botão X
+                // remove caption and buttons
+                style &= ~WS_CAPTION;     // no title/icon
+                style &= ~WS_THICKFRAME;  // no resize
+                style &= ~WS_MINIMIZEBOX; // without minimizing
+                style &= ~WS_MAXIMIZEBOX; // without maximizing
+                style &= ~WS_SYSMENU;     // no X button
 
-                // mantém moldura de diálogo (borda de janela sem título)
+                // maintains dialog frame (untitled window border)
                 style |= WS_DLGFRAME;
 
                 SetWindowLongPtr(childHwnd, GWL_STYLE, new nint(style));
 
-                // evita ícone na taskbar
+                // avoid icon in taskbar
                 var ex = GetWindowLongPtr(childHwnd, GWL_EXSTYLE).ToInt64();
                 ex &= ~WS_EX_APPWINDOW;
                 ex |= WS_EX_TOOLWINDOW;
                 SetWindowLongPtr(childHwnd, GWL_EXSTYLE, new nint(ex));
 
-                // aplica mudanças
+                // apply changes
                 SetWindowPos(childHwnd, IntPtr.Zero, 0, 0, 0, 0,
                     SWP_NOMOVE | SWP_NOSIZE | SWP_FRAMECHANGED);
             }
-            catch { /* ignore */ }
+            catch { }
 
-            // 4) Centraliza
+            // 4) Centralize
             try
             {
                 var childWindowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(childHwnd);
@@ -252,10 +251,10 @@ namespace BTG.ClientsApp.Services
 
                 appWindow?.MoveAndResize(new Windows.Graphics.RectInt32(x, y, w, h));
 
-                // 5) Controle de fechamento
+                // 5) Closing control
                 if (appWindow is not null)
                 {
-                    // a) Cancelar qualquer tentativa de fechar do usuário (Alt+F4, etc.)
+                    // a) Cancel any user close attempt (Alt+F4, etc.)
                     appWindow.Closing += (s, e) =>
                     {
                         try
@@ -265,11 +264,11 @@ namespace BTG.ClientsApp.Services
 
                             if (!allowClose)
                             {
-                                e.Cancel = true;                // bloqueia fechamento do usuário
-                                SetForegroundWindow(childHwnd); // mantém foco no modal
+                                e.Cancel = true;                // blocks user closure
+                                SetForegroundWindow(childHwnd); // keeps focus on the modal
                             }
-                            // quando allowClose==true, não reabilitamos owner aqui
-                            // pois o CloseWindowSafe já reabilitou ANTES de fechar.
+                            // when allowClose==true, we do not re-enable owner here
+                            // because CloseWindowSafe has already re-enabled BEFORE closing.
                         }
                         catch
                         {
@@ -278,9 +277,9 @@ namespace BTG.ClientsApp.Services
                         }
                     };
 
-                    // b) Plano B: se por algum motivo a janela realmente fechar,
-                    // garanta que o owner volte habilitado (evita “owner travado”)
-                    // Hook em Closed do XAML e também em Destroying do AppWindow (quando disponível)
+                    // b) Plan B: if for some reason the window actually closes,
+                    // ensure that the owner is enabled again (avoids “owner stuck”)
+                    // Hook in XAML Closed and also in AppWindow Destroying (when available)
                     childNative!.Closed += (_, __) =>
                     {
                         try
@@ -294,11 +293,75 @@ namespace BTG.ClientsApp.Services
                             }
                             if (owner != 0) EnableWindow(owner, true);
                         }
-                        catch { /* ignore */ }
+                        catch {}
                     };
                 }
             }
-            catch { /* ignore */ }
+            catch { }
+        }
+
+        public async Task CloseApplicationAsync(Page? anchor = null, bool askConfirm = true)
+        {
+#if WINDOWS
+            try
+            {
+                // 1) Confirmation (optional)
+                if (askConfirm)
+                {
+                    var page = anchor ?? Application.Current?.MainPage;
+                    if (page != null)
+                    {
+                        var ok = await page.DisplayAlert("Sair", "Deseja realmente fechar a aplicação?", "Sim", "Cancelar");
+                        if (!ok) return;
+                    }
+                }
+
+                // 2) Rehabilitates any 'owned' window and authorizes closure (if you have modals opened by your service)
+                try
+                {
+                    lock (s_lock)
+                    {
+                        foreach (var kv in s_ownerByChild.ToList())
+                        {
+                            var child = kv.Key;
+                            var owner = kv.Value;
+                            try { EnableWindow(owner, true); } catch { }
+                            s_canClose.Add(child);
+                            s_ownerByChild.Remove(child);
+                        }
+                    }
+                }
+                catch {}
+
+                // 3) Close ALL MAUI windows cleanly via native (avoids heap corruption)
+                var windows = Application.Current?.Windows?.ToList() ?? new List<Window>();
+                foreach (var win in windows)
+                {
+                    try
+                    {
+                        if (win?.Handler?.PlatformView is Microsoft.UI.Xaml.Window native)
+                            native.Close(); // close WinUI Window
+                        else
+                            Application.Current?.CloseWindow(win); // fallback MAUI
+                    }
+                    catch { }
+                }
+
+                // 4)If there is any left (rare), close the main one last
+                var main = Application.Current?.Windows?.FirstOrDefault();
+                if (main?.Handler?.PlatformView is Microsoft.UI.Xaml.Window mainNative)
+                    mainNative.Close();
+                else if (main is not null)
+                    Application.Current?.CloseWindow(main);
+#else
+            // Other platforms: optionally ignore
+            await Task.CompletedTask;
+#endif
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Erro ao fechar aplicação: {ex}");
+            }
         }
 #endif
     }
