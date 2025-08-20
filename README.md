@@ -4,7 +4,7 @@ Aplicativo **.NET MAUI (Windows)** com CRUD de clientes (MVVM + CommunityToolkit
 
 ## Telas do App 
   ![Lista](docs/images/lista.png)
-  ![Form](docs/images/form.png)
+  ![Formulário](docs/images/form.png)
 
 ## Tecnologias
 - .NET 9 / MAUI (Windows)
