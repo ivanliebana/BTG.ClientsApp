@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:BTG.ClientsApp.ViewModels"
+    x:Class="BTG.ClientsApp.Views.ClientFormPage"
+    x:DataType="vm:ClientFormViewModel"
+    Title="Cliente"
+    BackgroundColor="{StaticResource PageBackgroundColor}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/Styles/ClientsTheme.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid Padding="16" RowDefinitions="Auto,*" HorizontalOptions="Center" MaximumWidthRequest="720">
+        <Label Text="Dados do Cliente" Style="{StaticResource TitleLabel}" />
+
+        <Border Grid.Row="1" Style="{StaticResource Card}">
+            <ScrollView>
+                <VerticalStackLayout Spacing="14">
+
+                    <VerticalStackLayout>
+                        <Label Text="Nome" Style="{StaticResource FieldLabel}" />
+                        <Border Style="{StaticResource InputBox}">
+                            <Entry Text="{Binding Name}" Placeholder="Ex.: Maria" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout>
+                        <Label Text="Sobrenome" Style="{StaticResource FieldLabel}" />
+                        <Border Style="{StaticResource InputBox}">
+                            <Entry Text="{Binding Lastname}" Placeholder="Ex.: Souza" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout>
+                        <Label Text="Idade" Style="{StaticResource FieldLabel}" />
+                        <Border Style="{StaticResource InputBox}">
+                            <Entry Text="{Binding AgeText}" Keyboard="Numeric" Placeholder="Apenas números" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout>
+                        <Label Text="Endereço" Style="{StaticResource FieldLabel}" />
+                        <Border Style="{StaticResource InputBox}">
+                            <Entry Text="{Binding Address}" Placeholder="Rua, número, complemento" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="12" Margin="0,8,0,0">
+                        <Grid Grid.Column="0"/>
+                        <Button Grid.Column="1" Text="Salvar"   Style="{StaticResource PrimaryButton}" Command="{Binding SaveCommand}" />
+                        <Button Grid.Column="2" Text="Cancelar" Style="{StaticResource GhostButton}"   Command="{Binding CancelCommand}" />
+                    </Grid>
+
+                </VerticalStackLayout>
+            </ScrollView>
+        </Border>
+    </Grid>
+</ContentPage>

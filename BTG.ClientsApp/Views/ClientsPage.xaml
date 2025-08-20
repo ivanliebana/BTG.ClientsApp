@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="BTG.ClientsApp.Views.ClientsPage"
+    Title="Clientes"
+    BackgroundColor="{StaticResource PageBackgroundColor}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/Styles/ClientsTheme.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,*" Padding="16,12">
+
+        <!-- Cabeçalho -->
+        <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center">
+            <Label Text="Lista de Clientes" Style="{StaticResource TitleLabel}" />
+            <Button Grid.Column="1"
+                    Text="Adicionar"
+                    Style="{StaticResource PrimaryButton}"
+                    Command="{Binding AddCommand}" />
+        </Grid>
+
+        <!-- Lista -->
+        <CollectionView Grid.Row="1"
+                        ItemsSource="{Binding Clients}"
+                        SelectionMode="None"
+                        Margin="0,12,0,0">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border Style="{StaticResource Card}" Margin="0,8,0,0">
+                        <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="12">
+                            <VerticalStackLayout Spacing="2">
+                                <Label Text="{Binding FullName}" FontAttributes="Bold" FontSize="16"/>
+                                <Label Text="{Binding Address}" Style="{StaticResource MutedLabel}" />
+                                <Label Text="{Binding Age, StringFormat='Idade: {0}'}" Style="{StaticResource MutedLabel}" />
+                            </VerticalStackLayout>
+
+                            <Button Grid.Column="1"
+                                    Text="Editar"
+                                    Style="{StaticResource GhostButton}"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditCommand}"
+                                    CommandParameter="{Binding}" />
+
+                            <Button Grid.Column="2"
+                                    Text="Excluir"
+                                    Style="{StaticResource DangerButton}"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteCommand}"
+                                    CommandParameter="{Binding}" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

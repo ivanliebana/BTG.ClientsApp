@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36408.4
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTG.ClientsApp", "BTG.ClientsApp\BTG.ClientsApp.csproj", "{6FDCD2C6-2EB4-F7CF-7F77-AECF9B2BCE80}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTG.ClientsApp.Tests", "BTG.ClientsApp.Tests\BTG.ClientsApp.Tests.csproj", "{3743915C-86BA-765F-FECF-B90D3EEA8414}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6FDCD2C6-2EB4-F7CF-7F77-AECF9B2BCE80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FDCD2C6-2EB4-F7CF-7F77-AECF9B2BCE80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FDCD2C6-2EB4-F7CF-7F77-AECF9B2BCE80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FDCD2C6-2EB4-F7CF-7F77-AECF9B2BCE80}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3743915C-86BA-765F-FECF-B90D3EEA8414}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3743915C-86BA-765F-FECF-B90D3EEA8414}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3743915C-86BA-765F-FECF-B90D3EEA8414}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3743915C-86BA-765F-FECF-B90D3EEA8414}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {82BA12ED-D7F3-476F-BCE4-41F413CDC8EA}
+	EndGlobalSection
+EndGlobal

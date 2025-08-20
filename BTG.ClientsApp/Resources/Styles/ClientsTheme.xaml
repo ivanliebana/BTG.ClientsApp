@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- Paleta fixa -->
+    <Color x:Key="PrimaryColor">#5B6CFF</Color>
+    <Color x:Key="PrimaryColorDark">#3D4EEB</Color>
+    <Color x:Key="DangerColor">#E53935</Color>
+    <Color x:Key="DangerColorDark">#C62828</Color>
+
+    <Color x:Key="PageBackgroundColor">#F7F8FA</Color>
+    <Color x:Key="CardBackgroundColor">#FFFFFF</Color>
+    <Color x:Key="CardStrokeColor">#E6E8EF</Color>
+    <Color x:Key="TextPrimaryColor">#000000</Color>
+    <Color x:Key="TextMutedColor">#6B7280</Color>
+    <Color x:Key="InputBoxBackground">#FAFBFF</Color>
+
+    <!-- Estilos (mesmos nomes usados nas páginas) -->
+    <Style TargetType="Label" x:Key="TitleLabel">
+        <Setter Property="FontSize" Value="22" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="TextColor" Value="{StaticResource TextPrimaryColor}" />
+    </Style>
+
+    <Style TargetType="Label" x:Key="MutedLabel">
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="TextColor" Value="{StaticResource TextMutedColor}" />
+    </Style>
+
+    <Style TargetType="Label" x:Key="FieldLabel">
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="TextColor" Value="{StaticResource TextMutedColor}" />
+        <Setter Property="Margin" Value="2,0,0,4"/>
+    </Style>
+
+    <Style TargetType="Button" x:Key="BaseButton">
+        <Setter Property="CornerRadius" Value="10" />
+        <Setter Property="Padding" Value="16,10" />
+        <Setter Property="FontAttributes" Value="Bold" />
+    </Style>
+
+    <Style TargetType="Button" x:Key="PrimaryButton" BasedOn="{StaticResource BaseButton}">
+        <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor}" />
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="Shadow">
+            <Setter.Value>
+                <Shadow Opacity="0.25" Radius="8" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <Setter.Value>
+                <VisualStateGroupList>
+                    <VisualStateGroup>
+                        <VisualState Name="Pressed">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColorDark}" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="Button" x:Key="DangerButton" BasedOn="{StaticResource BaseButton}">
+        <Setter Property="BackgroundColor" Value="{StaticResource DangerColor}" />
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <Setter.Value>
+                <VisualStateGroupList>
+                    <VisualStateGroup>
+                        <VisualState Name="Pressed">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="{StaticResource DangerColorDark}" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="Button" x:Key="GhostButton" BasedOn="{StaticResource BaseButton}">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="TextColor" Value="{StaticResource TextPrimaryColor}" />
+        <Setter Property="BorderColor" Value="{StaticResource CardStrokeColor}" />
+        <Setter Property="BorderWidth" Value="1" />
+    </Style>
+
+    <Style TargetType="Border" x:Key="Card">
+        <Setter Property="BackgroundColor" Value="{StaticResource CardBackgroundColor}" />
+        <Setter Property="Stroke" Value="{StaticResource CardStrokeColor}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="Padding" Value="18" />
+        <Setter Property="StrokeShape">
+            <Setter.Value>
+                <RoundRectangle CornerRadius="16"/>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Shadow">
+            <Setter.Value>
+                <Shadow Opacity="0.18" Radius="10" Offset="0,3" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="Border" x:Key="InputBox">
+        <Setter Property="Stroke" Value="{StaticResource CardStrokeColor}" />
+        <Setter Property="BackgroundColor" Value="{StaticResource InputBoxBackground}" />
+        <Setter Property="StrokeShape">
+            <Setter.Value>
+                <RoundRectangle CornerRadius="12"/>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Padding" Value="10,8"/>
+    </Style>
+
+</ResourceDictionary>

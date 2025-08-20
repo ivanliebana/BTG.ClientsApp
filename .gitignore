@@ -1,0 +1,43 @@
+# Build / IDE
+**/bin/
+**/obj/
+.vs/
+*.user
+*.userosscache
+*.suo
+*.cache
+*.opendb
+*.log
+
+# Testes
+TestResults/
+*.trx
+*.coverage*
+*.code-coverage
+
+# Pacotes / artefatos
+*.nupkg
+*.snupkg
+*.pdb
+*.mdb
+
+# SO
+.DS_Store
+Thumbs.db
+
+# Android/iOS assinaturas/artefatos
+*.keystore
+*.keystore.jks
+*.aab
+*.apk
+*.ipa
+*.p12
+*.pfx
+*.cer
+
+# MAUI específicos (redundante, mas ok)
+**/Platforms/*/bin/
+**/Platforms/*/obj/
+
+# Configs locais
+*.csproj.user
